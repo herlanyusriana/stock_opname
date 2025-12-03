@@ -25,19 +25,25 @@ class CountController extends Controller
         $viewMode = $request->get('view', 'review');
         $query = Count::with(['location', 'user', 'items'])->latest();
 
-        if ($user->isKeeper()) {
+        // Handle viewMode first for all users
+        if ($viewMode === 'my') {
+            // Show all counts created by the user regardless of status
+            $query->where('user_id', $user->id);
+        } elseif ($user->isKeeper()) {
+            // Keepers only see their own counts
             $query->where('user_id', $user->id);
         } elseif ($user->isAuditor()) {
+            // Auditors see CHECKED status in review mode
             $query->where('status', CountStatus::CHECKED);
         } elseif ($user->isSupervisor()) {
+            // Supervisors see VERIFIED status in approval mode
             $query->where('status', CountStatus::VERIFIED);
         } else {
+            // Other users: filter by viewMode
             if ($viewMode === 'approval') {
                 $query->where('status', CountStatus::VERIFIED);
-            } elseif ($viewMode === 'my') {
-                // Show all counts created by the user
-                $query->where('user_id', $user->id);
-            } elseif ($viewMode === 'review') {
+            } else {
+                // Default to review mode (CHECKED status)
                 $query->where('status', CountStatus::CHECKED);
             }
         }

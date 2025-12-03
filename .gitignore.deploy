@@ -1,0 +1,6 @@
+# Ignore deployment files from git
+deploy.tar.gz
+*.tar.gz
+
+# VPS specific files
+vps-setup.sh

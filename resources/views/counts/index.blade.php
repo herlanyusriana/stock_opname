@@ -13,14 +13,52 @@
 
 <x-app-layout>
     <div class="space-y-6">
+        {{-- View Mode Tabs --}}
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8">
+                <a href="{{ route('counts.index', ['view' => 'my']) }}"
+                   class="@if($viewMode === 'my') border-indigo-500 text-indigo-600 @else border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 @endif whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
+                    My Counts
+                </a>
+                <a href="{{ route('counts.index', ['view' => 'review']) }}"
+                   class="@if($viewMode === 'review') border-indigo-500 text-indigo-600 @else border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 @endif whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
+                    Review Workflow
+                </a>
+                <a href="{{ route('counts.index', ['view' => 'approval']) }}"
+                   class="@if($viewMode === 'approval') border-indigo-500 text-indigo-600 @else border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 @endif whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium">
+                    Approval Workflow
+                </a>
+            </nav>
+        </div>
+
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-                <p class="text-sm text-gray-500">{{ $viewMode === 'approval' ? 'Approval Workflow' : 'Review Workflow' }}</p>
+                <p class="text-sm text-gray-500">
+                    @if($viewMode === 'my')
+                        My Submitted Counts
+                    @elseif($viewMode === 'approval')
+                        Approval Workflow
+                    @else
+                        Review Workflow
+                    @endif
+                </p>
                 <h1 class="text-3xl font-semibold text-gray-900">
-                    {{ $viewMode === 'approval' ? 'Approval Workflow' : 'Review Count Records' }}
+                    @if($viewMode === 'my')
+                        My Count Records
+                    @elseif($viewMode === 'approval')
+                        Approval Workflow
+                    @else
+                        Review Count Records
+                    @endif
                 </h1>
                 <p class="text-sm text-gray-500">
-                    {{ $viewMode === 'approval' ? 'Approve verified counts to lock inventory records.' : 'Submitted records awaiting review from auditors.' }}
+                    @if($viewMode === 'my')
+                        View and manage all your submitted count records.
+                    @elseif($viewMode === 'approval')
+                        Approve verified counts to lock inventory records.
+                    @else
+                        Submitted records awaiting review from auditors.
+                    @endif
                 </p>
             </div>
             <div class="flex flex-wrap items-center gap-3">

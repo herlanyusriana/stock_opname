@@ -34,6 +34,9 @@ class CountController extends Controller
         } else {
             if ($viewMode === 'approval') {
                 $query->where('status', CountStatus::VERIFIED);
+            } elseif ($viewMode === 'my') {
+                // Show all counts created by the user
+                $query->where('user_id', $user->id);
             } elseif ($viewMode === 'review') {
                 $query->where('status', CountStatus::CHECKED);
             }

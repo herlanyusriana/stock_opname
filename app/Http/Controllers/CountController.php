@@ -33,8 +33,8 @@ class CountController extends Controller
             // Keepers only see their own counts
             $query->where('user_id', $user->id);
         } elseif ($user->isAuditor()) {
-            // Auditors see CHECKED status in review mode
-            $query->where('status', CountStatus::CHECKED);
+            // Auditors see both COUNTED and CHECKED status in review mode
+            $query->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED]);
         } elseif ($user->isSupervisor()) {
             // Supervisors see VERIFIED status in approval mode
             $query->where('status', CountStatus::VERIFIED);
@@ -43,8 +43,8 @@ class CountController extends Controller
             if ($viewMode === 'approval') {
                 $query->where('status', CountStatus::VERIFIED);
             } else {
-                // Default to review mode (CHECKED status)
-                $query->where('status', CountStatus::CHECKED);
+                // Default to review mode (show both fresh submissions and reviewed items)
+                $query->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED]);
             }
         }
 

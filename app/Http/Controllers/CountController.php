@@ -25,11 +25,7 @@ class CountController extends Controller
         $viewMode = $request->get('view', 'review');
         $query = Count::with(['location', 'user', 'items'])->latest();
 
-        // Handle viewMode first for all users
-        if ($viewMode === 'my') {
-            // Show all counts created by the user regardless of status
-            $query->where('user_id', $user->id);
-        } elseif ($user->isKeeper()) {
+        if ($user->isKeeper()) {
             // Keepers only see their own counts
             $query->where('user_id', $user->id);
         } elseif ($user->isAuditor()) {

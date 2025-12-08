@@ -17,11 +17,11 @@
     <body class="font-sans antialiased bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-900">
         @php
             $navLinks = [
-                ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => 'M3 12l9-9 9 9M4 10v9a1 1 0 001 1h5v-6h4v6h5a1 1 0 001-1v-9'],
-                ['label' => 'Warehouse Management', 'route' => 'locations.index', 'icon' => 'M4 7h16M4 11h16M4 15h7m3 0h4'],
-                ['label' => 'Part Management', 'route' => 'parts.index', 'icon' => 'M4 6h16M4 10h16M4 14h10M4 18h10'],
-                ['label' => 'Review Workflow', 'route' => 'counts.index', 'params' => ['view' => 'review'], 'icon' => 'M5 8h14M5 12h14M5 16h10'],
-                ['label' => 'Approval Page', 'route' => 'counts.index', 'params' => ['view' => 'approval'], 'icon' => 'M9 12l2 2 4-4M4 6h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z'],
+                ['label' => 'Dashboard', 'route' => 'dashboard', 'icon' => '<g stroke="currentColor" stroke-width="1.8" fill="none"><path d="M3 12l9-9 9 9M4 10v9a1 1 0 001 1h5v-6h4v6h5a1 1 0 001-1v-9"/></g>'],
+                ['label' => 'Warehouse Management', 'route' => 'locations.index', 'icon' => '<g stroke="currentColor" stroke-width="1.8" fill="none"><path d="M4 7h16M4 11h16M4 15h7m3 0h4"/></g>'],
+                ['label' => 'Part Management', 'route' => 'parts.index', 'icon' => '<g stroke="currentColor" stroke-width="1.8" fill="none"><path d="M4 6h16M4 10h16M4 14h10M4 18h10"/></g>'],
+                ['label' => 'Review Workflow', 'route' => 'counts.index', 'params' => ['view' => 'review'], 'icon' => '<g stroke="currentColor" stroke-width="1.8" fill="none"><path d="M5 8h14M5 12h14M5 16h10"/></g>'],
+                ['label' => 'Approval Page', 'route' => 'counts.index', 'params' => ['view' => 'approval'], 'icon' => '<g stroke="currentColor" stroke-width="1.8" fill="none"><path d="M9 12l2 2 4-4M4 6h16a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V7a1 1 0 011-1z"/></g>'],
             ];
         @endphp
         <div class="min-h-screen flex">
@@ -51,8 +51,8 @@
                         <a href="{{ route($link['route'], $link['params'] ?? []) }}"
                            class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition {{ $active ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-200' : 'text-gray-600 hover:bg-blue-50' }}">
                             <span class="inline-flex items-center justify-center rounded-lg {{ $active ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-600' }} p-2">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="{{ $link['icon'] }}" />
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    {!! $link['icon'] !!}
                                 </svg>
                             </span>
                             {{ $link['label'] }}

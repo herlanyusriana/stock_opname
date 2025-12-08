@@ -15,11 +15,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('vendors', VendorController::class);
+    
+    // Parts import/export routes (before resource)
+    Route::get('parts/import/page', [PartController::class, 'importPage'])->name('parts.import.page');
+    Route::post('parts/import', [PartController::class, 'import'])->name('parts.import');
+    Route::get('parts/export', [PartController::class, 'export'])->name('parts.export');
     Route::resource('parts', PartController::class);
-    Route::resource('locations', LocationController::class);
-    Route::resource('counts', CountController::class);
-
+    
+    // Locations import/export routes (before resource)
+    Route::get('locations/import/page', [LocationController::class, 'importPage'])->name('locations.import.page');
+    Route::post('locations/import', [LocationController::class, 'import'])->name('locations.import');
+    Route::get('locations/export', [LocationController::class, 'export'])->name('locations.export');
     Route::get('locations/print/all', [LocationController::class, 'printAll'])->name('locations.printAll');
+    Route::resource('locations', LocationController::class);
+    
+    Route::resource('counts', CountController::class);
 
     Route::get('/qr/location/{location}', [QrController::class, 'generateLocationQr'])->name('qr.location');
     Route::get('/qr/part/{part}', [QrController::class, 'generatePartQr'])->name('qr.part');

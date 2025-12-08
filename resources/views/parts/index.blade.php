@@ -28,9 +28,17 @@
                         <option>Status</option>
                     </select>
                 </div>
-                <a href="{{ route('parts.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-sm">
-                    + Add New Part
-                </a>
+                <div class="flex gap-3">
+                    <a href="{{ route('parts.import.page') }}" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                        Import Excel
+                    </a>
+                    <a href="{{ route('parts.export') }}" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                        Export Excel
+                    </a>
+                    <a href="{{ route('parts.create') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-sm">
+                        + Add New Part
+                    </a>
+                </div>
             </div>
 
             <div class="overflow-x-auto">

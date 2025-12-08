@@ -23,6 +23,12 @@
                     </span>
                 </form>
                 <div class="flex gap-3">
+                    <a href="{{ route('locations.import.page') }}" class="inline-flex items-center gap-2 rounded-2xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                        Import Excel
+                    </a>
+                    <a href="{{ route('locations.export') }}" class="inline-flex items-center gap-2 rounded-2xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                        Export Excel
+                    </a>
                     <a href="{{ route('locations.printAll') }}" class="inline-flex items-center gap-2 rounded-2xl border border-gray-200 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
                         Print All QR
                     </a>

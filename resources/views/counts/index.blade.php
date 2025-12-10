@@ -99,7 +99,7 @@
                             <th class="px-6 py-4 text-left">Submitted By</th>
                             <th class="px-6 py-4 text-left">Submission Date</th>
                             <th class="px-6 py-4 text-left">Status</th>
-                            <th class="px-6 py-4 text-right"></th>
+                            <th class="px-6 py-4 text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-sm">
@@ -121,7 +121,36 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
-                                    <a href="{{ route('counts.show', $count) }}" class="text-indigo-600 font-semibold text-sm hover:text-indigo-800">View</a>
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a href="{{ route('counts.show', $count) }}" class="text-indigo-600 font-semibold text-sm hover:text-indigo-800">View</a>
+
+                                        @can('check', $count)
+                                            <form action="{{ route('counts.check', $count) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="rounded-lg bg-gray-800 px-3 py-1 text-xs font-semibold text-white hover:bg-gray-900">
+                                                    Check
+                                                </button>
+                                            </form>
+                                        @endcan
+
+                                        @can('verify', $count)
+                                            <form action="{{ route('counts.verify', $count) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-1 text-xs font-semibold text-white hover:bg-emerald-700">
+                                                    Verify
+                                                </button>
+                                            </form>
+                                        @endcan
+
+                                        @can('approve', $count)
+                                            <form action="{{ route('counts.approve', $count) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="rounded-lg bg-indigo-600 px-3 py-1 text-xs font-semibold text-white hover:bg-indigo-700">
+                                                    Approve
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </div>
                                 </td>
                             </tr>
                         @empty

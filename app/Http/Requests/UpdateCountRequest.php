@@ -25,6 +25,8 @@ class UpdateCountRequest extends FormRequest
         return [
             'code' => ['sometimes', 'string', 'max:100', Rule::unique('counts', 'code')->ignore($this->count)],
             'location_id' => ['sometimes', 'exists:locations,id'],
+            'pic_name' => ['sometimes', 'string', 'max:150'],
+            'auditor_id' => ['sometimes', 'exists:users,id'],
             'shift' => ['sometimes', 'string', 'max:50'],
             'production_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],

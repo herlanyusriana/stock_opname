@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('counts/{count}/verify', [CountController::class, 'verify'])->name('counts.verify');
     Route::post('counts/{count}/reject', [CountController::class, 'reject'])->name('counts.reject');
     Route::post('counts/{count}/approve', [CountController::class, 'approve'])->name('counts.approve');
+    Route::get('counts/{count}/assignment-pdf', [CountController::class, 'assignmentPdf'])->name('counts.assignment.pdf');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

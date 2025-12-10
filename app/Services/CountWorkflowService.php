@@ -23,7 +23,9 @@ class CountWorkflowService
             $count = Count::create([
                 'code' => $payload['code'] ?? Str::upper(Str::random(10)),
                 'location_id' => $payload['location_id'],
+                'pic_name' => $payload['pic_name'] ?? null,
                 'user_id' => $user->id,
+                'auditor_id' => $payload['auditor_id'] ?? null,
                 'status' => CountStatus::COUNTED,
                 'shift' => $payload['shift'],
                 'production_date' => $payload['production_date'] ?? null,
@@ -51,6 +53,8 @@ class CountWorkflowService
             $count->update([
                 'code' => $payload['code'] ?? $count->code,
                 'location_id' => $payload['location_id'] ?? $count->location_id,
+                'pic_name' => $payload['pic_name'] ?? $count->pic_name,
+                'auditor_id' => $payload['auditor_id'] ?? $count->auditor_id,
                 'shift' => $payload['shift'] ?? $count->shift,
                 'production_date' => $payload['production_date'] ?? $count->production_date,
                 'notes' => $payload['notes'] ?? $count->notes,

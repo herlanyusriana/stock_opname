@@ -24,6 +24,8 @@ class StoreCountRequest extends FormRequest
         return [
             'code' => ['nullable', 'string', 'max:100', 'unique:counts,code'],
             'location_id' => ['required', 'exists:locations,id'],
+            'pic_name' => ['required', 'string', 'max:150'],
+            'auditor_id' => ['required', 'exists:users,id'],
             'shift' => ['required', 'string', 'max:50'],
             'production_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string'],

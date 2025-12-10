@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\CountStatus;
+use App\Enums\UserRole;
 use App\Http\Requests\RejectCountRequest;
 use App\Http\Requests\StoreCountRequest;
 use App\Http\Requests\UpdateCountRequest;
 use App\Models\Count;
 use App\Models\Location;
 use App\Models\Part;
+use App\Models\User;
 use App\Services\CountWorkflowService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class CountController extends Controller
@@ -23,14 +26,14 @@ class CountController extends Controller
     {
         $user = $request->user();
         $viewMode = $request->get('view', 'review');
-        $query = Count::with(['location', 'user', 'items'])->latest();
+        $query = Count::with(['location', 'user', 'auditor', 'items'])->latest();
 
         if ($user->isAuditor()) {
-            // Auditors see both COUNTED and CHECKED status in review mode
-            $query->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED]);
+            // Auditors see only records assigned to them
+            $query->where('auditor_id', $user->id)
+                ->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED, CountStatus::VERIFIED]);
         } elseif ($user->isSupervisor()) {
-            // Supervisors see VERIFIED status in approval mode
-            $query->where('status', CountStatus::VERIFIED);
+            // Supervisors see all records for assignment and approval
         } else {
             // Other users: filter by viewMode
             if ($viewMode === 'approval') {
@@ -53,8 +56,9 @@ class CountController extends Controller
     {
         $locations = Location::orderBy('name')->get();
         $parts = Part::orderBy('name')->get();
+        $auditors = User::where('role', UserRole::AUDITOR->value)->orderBy('name')->get();
 
-        return view('counts.create', compact('locations', 'parts'));
+        return view('counts.create', compact('locations', 'parts', 'auditors'));
     }
 
     public function store(StoreCountRequest $request)
@@ -66,7 +70,7 @@ class CountController extends Controller
 
     public function show(Count $count)
     {
-        $count->load(['location', 'user', 'items.part', 'activityLogs.user']);
+        $count->load(['location', 'user', 'auditor', 'items.part', 'activityLogs.user']);
 
         return view('counts.show', compact('count'));
     }
@@ -75,8 +79,9 @@ class CountController extends Controller
     {
         $locations = Location::orderBy('name')->get();
         $parts = Part::orderBy('name')->get();
+        $auditors = User::where('role', UserRole::AUDITOR->value)->orderBy('name')->get();
 
-        return view('counts.edit', compact('count', 'locations', 'parts'));
+        return view('counts.edit', compact('count', 'locations', 'parts', 'auditors'));
     }
 
     public function update(UpdateCountRequest $request, Count $count)
@@ -127,5 +132,15 @@ class CountController extends Controller
         $count = $this->workflow->approveCount($count, $request->user());
 
         return redirect()->route('counts.show', $count);
+    }
+
+    public function assignmentPdf(Count $count)
+    {
+        $this->authorize('view', $count);
+        $count->load(['location', 'auditor']);
+
+        $pdf = Pdf::loadView('counts.assignment_pdf', ['count' => $count]);
+
+        return $pdf->download("assignment-{$count->code}.pdf");
     }
 }

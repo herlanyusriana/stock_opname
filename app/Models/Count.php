@@ -16,7 +16,9 @@ class Count extends Model
     protected $fillable = [
         'code',
         'location_id',
+        'pic_name',
         'user_id',
+        'auditor_id',
         'status',
         'shift',
         'production_date',
@@ -46,6 +48,11 @@ class Count extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function auditor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'auditor_id');
     }
 
     public function items(): HasMany

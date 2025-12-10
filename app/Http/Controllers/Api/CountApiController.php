@@ -23,12 +23,11 @@ class CountApiController extends Controller
         $user = $request->user();
         $status = $request->query('status');
 
-        $query = Count::with(['location', 'user', 'items.part'])->latest();
+        $query = Count::with(['location', 'user', 'auditor', 'items.part'])->latest();
 
         if ($user->isAuditor()) {
-            $query->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED]);
-        } elseif ($user->isSupervisor()) {
-            $query->where('status', CountStatus::VERIFIED);
+            $query->where('auditor_id', $user->id)
+                ->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED, CountStatus::VERIFIED]);
         }
 
         if ($status) {
@@ -45,7 +44,7 @@ class CountApiController extends Controller
         $this->authorize('create', Count::class);
         $count = $this->workflow->createCount($request->user(), $request->validated());
 
-        return response()->json($count->load(['location', 'items.part']), 201);
+        return response()->json($count->load(['location', 'items.part', 'auditor']), 201);
     }
 
     public function show(Count $count)
@@ -53,7 +52,7 @@ class CountApiController extends Controller
         $this->authorize('view', $count);
         $count->load(['location', 'items.part', 'user']);
 
-        return response()->json($count);
+        return response()->json($count->load(['auditor']));
     }
 
     public function update(UpdateCountRequest $request, Count $count)
@@ -61,7 +60,7 @@ class CountApiController extends Controller
         $this->authorize('update', $count);
         $count = $this->workflow->updateCount($count, $request->user(), $request->validated());
 
-        return response()->json($count->load(['location', 'items.part']));
+        return response()->json($count->load(['location', 'items.part', 'auditor']));
     }
 
     public function check(Request $request, Count $count)

@@ -25,6 +25,11 @@
                 <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $statusStyles[$count->status->value] ?? 'bg-gray-100 text-gray-700' }}">
                     {{ strtoupper($count->status->value) }}
                 </span>
+                @can('view', $count)
+                    <a href="{{ route('counts.assignment.pdf', $count) }}" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">
+                        Download PDF
+                    </a>
+                @endcan
                 @can('update', $count)
                     <a href="{{ route('counts.edit', $count) }}" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">Edit</a>
                 @endcan
@@ -48,8 +53,16 @@
                         <p class="text-lg font-semibold text-gray-900">{{ $count->location?->name }} ({{ $count->location?->code }})</p>
                     </div>
                     <div class="space-y-2">
+                        <p class="text-xs uppercase tracking-[0.3em] text-gray-400">PIC (Auditee)</p>
+                        <p class="text-lg font-semibold text-gray-900">{{ $count->pic_name ?? '-' }}</p>
+                    </div>
+                    <div class="space-y-2">
                         <p class="text-xs uppercase tracking-[0.3em] text-gray-400">Production Date</p>
                         <p class="text-lg font-semibold text-gray-900">{{ optional($count->production_date)->format('Y-m-d') ?? 'N/A' }}</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-xs uppercase tracking-[0.3em] text-gray-400">Assigned Auditor</p>
+                        <p class="text-lg font-semibold text-gray-900">{{ $count->auditor?->name ?? '-' }}</p>
                     </div>
                     <div class="space-y-2">
                         <p class="text-xs uppercase tracking-[0.3em] text-gray-400">Total Parts</p>

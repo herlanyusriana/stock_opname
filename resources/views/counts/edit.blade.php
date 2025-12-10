@@ -51,6 +51,21 @@
                         </select>
                     </div>
                     <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-700">PIC (Auditee)</label>
+                        <input type="text" name="pic_name" value="{{ old('pic_name', $count->pic_name) }}" class="w-full rounded-2xl border border-gray-200 px-4 py-2.5 focus:border-indigo-500 focus:ring-0" placeholder="Nama PIC di lokasi">
+                    </div>
+                </div>
+
+                <div class="grid gap-5 md:grid-cols-2">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-gray-700">Assigned Auditor</label>
+                        <select name="auditor_id" class="w-full rounded-2xl border border-gray-200 px-4 py-2.5 text-gray-700 focus:border-indigo-500 focus:ring-0">
+                            @foreach ($auditors as $auditor)
+                                <option value="{{ $auditor->id }}" @selected(old('auditor_id', $count->auditor_id) == $auditor->id)>{{ $auditor->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="space-y-2">
                         <label class="text-sm font-medium text-gray-700">Shift</label>
                         <input type="text" name="shift" value="{{ old('shift', $count->shift) }}" class="w-full rounded-2xl border border-gray-200 px-4 py-2.5 focus:border-indigo-500 focus:ring-0">
                     </div>

@@ -29,11 +29,11 @@ class CountPolicy
     public function view(User $user, Count $count): bool
     {
         if ($user->isAuditor()) {
-            return true;
+            return $count->auditor_id === $user->id;
         }
 
         if ($user->isSupervisor()) {
-            return in_array($count->status, [CountStatus::VERIFIED, CountStatus::APPROVED], true);
+            return true;
         }
 
         return false;
@@ -41,36 +41,49 @@ class CountPolicy
 
     public function create(User $user): bool
     {
-        return $user->isAuditor();
+        return $user->isSupervisor();
     }
 
     public function update(User $user, Count $count): bool
     {
+        if ($user->isSupervisor()) {
+            return in_array($count->status, [CountStatus::COUNTED, CountStatus::REJECTED], true);
+        }
+
         return $user->isAuditor()
+            && $count->auditor_id === $user->id
             && in_array($count->status, [CountStatus::COUNTED, CountStatus::REJECTED], true);
     }
 
     public function delete(User $user, Count $count): bool
     {
+        if ($user->isSupervisor()) {
+            return true;
+        }
+
         return $user->isAuditor()
+            && $count->auditor_id === $user->id
             && $count->status === CountStatus::COUNTED;
     }
 
     public function check(User $user, Count $count): bool
     {
         return $user->isAuditor()
+            && $count->auditor_id === $user->id
             && $count->status === CountStatus::COUNTED;
     }
 
     public function verify(User $user, Count $count): bool
     {
         return $user->isAuditor()
+            && $count->auditor_id === $user->id
             && $count->status === CountStatus::CHECKED;
     }
 
     public function reject(User $user, Count $count): bool
     {
         return $user->isAuditor()
+            && $count->auditor_id === $user->id
             && $count->status === CountStatus::CHECKED;
     }
 

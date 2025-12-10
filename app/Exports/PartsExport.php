@@ -21,6 +21,7 @@ class PartsExport implements FromQuery, WithHeadings, WithMapping
             'sku',
             'vendor_name',
             'vendor_code',
+            'category',
             'uom',
             'description',
         ];
@@ -33,6 +34,7 @@ class PartsExport implements FromQuery, WithHeadings, WithMapping
             $row->sku,
             $row->vendor?->name,
             $row->vendor?->code,
+            $row->category,
             $row->uom,
             $row->description,
         ];

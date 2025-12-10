@@ -95,21 +95,27 @@ class LocationController extends Controller
 
     public function import()
     {
+        \Log::info('Location import: start', ['user_id' => auth()->id()]);
         request()->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv',
         ]);
 
         try {
             $import = new LocationsImport();
+            \Log::info('Location import: file received', ['original_name' => request()->file('file')->getClientOriginalName()]);
             Excel::import($import, request()->file('file'));
 
             $failures = $import->failures();
+            \Log::info('Location import: finished', ['failures_count' => count($failures)]);
             if (!empty($failures)) {
+                \Log::warning('Location import: some rows failed', ['failures' => $failures]);
                 return back()->with('warning', 'Import selesai dengan ' . count($failures) . ' baris gagal.');
             }
 
+            \Log::info('Location import: success');
             return redirect()->route('locations.index')->with('success', 'Import berhasil!');
         } catch (\Exception $e) {
+            \Log::error('Location import: exception', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return back()->with('error', 'Gagal import: ' . $e->getMessage());
         }
     }

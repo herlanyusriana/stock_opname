@@ -16,6 +16,7 @@ class Part extends Model
         'name',
         'sku',
         'vendor_id',
+        'category',
         'uom',
         'description',
     ];

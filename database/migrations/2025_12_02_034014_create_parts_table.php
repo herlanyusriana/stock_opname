@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('vendor_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('sku')->unique();
+            $table->string('category', 100);
             $table->string('uom', 50);
             $table->text('description')->nullable();
             $table->timestamps();

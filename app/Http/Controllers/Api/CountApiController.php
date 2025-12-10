@@ -25,10 +25,8 @@ class CountApiController extends Controller
 
         $query = Count::with(['location', 'user', 'items.part'])->latest();
 
-        if ($user->isKeeper()) {
-            $query->where('user_id', $user->id);
-        } elseif ($user->isAuditor()) {
-            $query->where('status', CountStatus::CHECKED);
+        if ($user->isAuditor()) {
+            $query->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED]);
         } elseif ($user->isSupervisor()) {
             $query->where('status', CountStatus::VERIFIED);
         }

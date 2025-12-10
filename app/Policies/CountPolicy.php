@@ -23,17 +23,13 @@ class CountPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole([UserRole::KEEPER, UserRole::AUDITOR, UserRole::SPV]);
+        return $user->hasAnyRole([UserRole::AUDITOR, UserRole::SPV]);
     }
 
     public function view(User $user, Count $count): bool
     {
-        if ($user->isKeeper()) {
-            return $count->user_id === $user->id;
-        }
-
         if ($user->isAuditor()) {
-            return in_array($count->status, [CountStatus::CHECKED, CountStatus::VERIFIED, CountStatus::REJECTED], true);
+            return true;
         }
 
         if ($user->isSupervisor()) {
@@ -45,27 +41,24 @@ class CountPolicy
 
     public function create(User $user): bool
     {
-        return $user->isKeeper();
+        return $user->isAuditor();
     }
 
     public function update(User $user, Count $count): bool
     {
-        return $user->isKeeper()
-            && $count->user_id === $user->id
+        return $user->isAuditor()
             && in_array($count->status, [CountStatus::COUNTED, CountStatus::REJECTED], true);
     }
 
     public function delete(User $user, Count $count): bool
     {
-        return $user->isKeeper()
-            && $count->user_id === $user->id
+        return $user->isAuditor()
             && $count->status === CountStatus::COUNTED;
     }
 
     public function check(User $user, Count $count): bool
     {
-        return $user->isKeeper()
-            && $count->user_id === $user->id
+        return $user->isAuditor()
             && $count->status === CountStatus::COUNTED;
     }
 

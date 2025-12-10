@@ -25,10 +25,7 @@ class CountController extends Controller
         $viewMode = $request->get('view', 'review');
         $query = Count::with(['location', 'user', 'items'])->latest();
 
-        if ($user->isKeeper()) {
-            // Keepers only see their own counts
-            $query->where('user_id', $user->id);
-        } elseif ($user->isAuditor()) {
+        if ($user->isAuditor()) {
             // Auditors see both COUNTED and CHECKED status in review mode
             $query->whereIn('status', [CountStatus::COUNTED, CountStatus::CHECKED]);
         } elseif ($user->isSupervisor()) {

@@ -21,7 +21,7 @@ class PartPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->isKeeper() || $user->isAuditor() || $user->isSupervisor();
+        return $user->isAuditor() || $user->isSupervisor();
     }
 
     public function view(User $user, Part $part): bool

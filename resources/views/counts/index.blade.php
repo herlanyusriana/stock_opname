@@ -72,7 +72,7 @@
                 </form>
                 @can('create', Count::class)
                     <a href="{{ route('counts.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm">
-                        + New Count
+                        + New Assignment
                     </a>
                 @endcan
             </div>
